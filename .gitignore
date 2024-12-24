@@ -1,7 +1,5 @@
 # Ignore everything inside datasets/ and its subdirectories
-datasets/**
-# Allow the datasets/ folder itself to stay
-!datasets/
+datasets/crema_d/*
 
 
 # Ignore temporary or hidden files
