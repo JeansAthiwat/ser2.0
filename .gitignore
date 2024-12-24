@@ -1,0 +1,21 @@
+# Ignore everything inside datasets/ and its subdirectories
+datasets/**
+# Allow the datasets/ folder itself to stay
+!datasets/
+
+
+# Ignore temporary or hidden files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments (if inside the project)
+venv/
+.env/
