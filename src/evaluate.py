@@ -8,11 +8,13 @@ from pathlib import Path
 from sklearn.metrics import confusion_matrix
 
 # Define the path to the organized dataset
-DATASET_PATH = "datasets/crema_d/organized"
-OUTPUT_FOLDER = "evaluation_outputs"
+# DATASET_PATH = "datasets/crema_d/organized"
+DATASET_NAME = "ser_jeans_voice"
+DATASET_PATH = f"datasets/{DATASET_NAME}/organized"
+OUTPUT_FOLDER = f"evaluation_outputs/{DATASET_NAME}"
 
 # Define the list of supported labels (CREMA-D labels)
-CREMA_D_LABELS = ["Angry", "Disgust", "Fearful", "Happy", "Neutral", "Sad"]
+CREMA_D_LABELS = ["Happy", "Neutral", "Sad"]
 
 # Define the mapping between CREMA-D labels and the model's RAVDESS labels
 MODEL_LABELS = [

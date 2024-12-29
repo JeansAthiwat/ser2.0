@@ -1,6 +1,6 @@
 # Ignore everything inside datasets/ and its subdirectories
 datasets/crema_d/*
-
+datasets/ser_jeans_voices/*
 
 # Ignore temporary or hidden files
 *.tmp
