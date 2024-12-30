@@ -4,52 +4,59 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from transformers import pipeline
-from pathlib import Path
-from sklearn.metrics import confusion_matrix
 
-# Define the path to the organized dataset
-# DATASET_PATH = "datasets/crema_d/organized"
-DATASET_NAME = "ser_jeans_voice"
-DATASET_PATH = f"datasets/{DATASET_NAME}/organized"
-OUTPUT_FOLDER = f"evaluation_outputs/{DATASET_NAME}"
-
-# Define the list of supported labels (CREMA-D labels)
-CREMA_D_LABELS = ["Angry", "Disgust", "Fearful", "Happy", "Neutral", "Sad"]
+# Define the list of supported emotion labels from this model dataset
+# ["angry", "calm", "disgust", "fearful", "happy", "neutral", "sad", "surprised"]
 
 
-# Load the pipeline
+# Function to load the emotion recognition model pipeline
 def load_pipeline(
     model="Wiam/wav2vec2-lg-xlsr-en-speech-emotion-recognition-finetuned-ravdess-v8",
 ):
-    # tried model="ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition" really bad
     print("Loading the Wav2Vec2 pipeline...")
-    print("model name:", model)
+    print("Model name:", model)
+    # Load the audio classification pipeline
     pipe = pipeline("audio-classification", model=model)
     return pipe
 
 
-# Preprocess the audio file
+# Function to preprocess the audio file
 def preprocess_audio(file_path, target_sr=16000):
-    # Load audio and resample to 16kHz
+    # Load the audio file and resample it to the target sampling rate
     signal, sr = librosa.load(file_path, sr=target_sr)
     return signal
 
 
-# Perform prediction using the pipeline
+# Function to predict emotion using the pipeline
 def predict_emotion(pipe, signal):
+
+    # Use the pipeline to make predictions
     result = pipe(signal, sampling_rate=16000)
-    # Extract the top prediction from the model
-    predicted_label = result[0]["label"]
+
+    # result returns a list of dict of top 5 predictions
+    # Extract the top predicted label from the results
+    # Example : [{'score': 0.8223342895507812, 'label': 'angry'}, {'score': 0.06475415080785751, 'label': 'surprised'}, {'score': 0.053048718720674515, 'label': 'disgust'}, {'score': 0.03450959175825119, 'label': 'happy'}, {'score': 0.009342065081000328, 'label': 'fearful'}]
+    # print(result)
+
+    predicted_label = result[0][
+        "label"
+    ]  # left most is the top prediction return just the label
     return predicted_label
 
 
-# Example usage
+# Example usage of the code
+if __name__ == "__main__":
+    # Path to the audio file for emotion prediction
+    audio_path = "datasets/example_angry_voice.wav"
 
-audio_path = (
-    "/home/jeans/nvaitc/ser/datasets/crema_d/organized/Angry/1091_WSI_ANG_XX.wav"
-)
-pipe = load_pipeline()
+    # Load the emotion recognition model pipeline
+    pipe = load_pipeline()
 
-signal = preprocess_audio(audio_path, target_sr=16000)
-result = predict_emotion(pipe, signal)
-print(result)
+    # Preprocess the audio file (convert it to a 16kHz signal MANDATORY)
+    signal = preprocess_audio(audio_path, target_sr=16000)
+
+    # Predict the emotion of the audio signal
+    result = predict_emotion(pipe, signal)
+
+    # Print the predicted emotion
+    print(f"Predicted Emotion: {result}")
